@@ -27,7 +27,7 @@ public class QrController {
     private static final Map<String, Boolean> qrUsageMap = new ConcurrentHashMap<>();
 
     @GetMapping("/qr")
-    public ResponseEntity<String> qrToTistory() throws WriterException {
+    public ResponseEntity<String> createMealTicketQr() throws WriterException {
 
         int width = 200;
         int height = 200;
