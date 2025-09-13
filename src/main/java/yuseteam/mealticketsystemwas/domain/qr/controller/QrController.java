@@ -62,4 +62,14 @@ public class QrController {
         qrUsageMap.put(uuid, true);
         return ResponseEntity.ok("QR 사용 성공");
     }
+
+    @GetMapping("/qr/info")
+    public ResponseEntity<String> getQrInfo(@RequestParam String uuid) {
+        Boolean used = qrUsageMap.get(uuid);
+        if (used == null) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
+        }
+        String status = used ? "사용됨" : "미사용";
+        return ResponseEntity.ok("QR 상태: " + status);
+    }
 }
