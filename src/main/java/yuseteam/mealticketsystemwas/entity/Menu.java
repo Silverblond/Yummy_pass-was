@@ -1,9 +1,9 @@
 package yuseteam.mealticketsystemwas.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 
 import java.util.List;
 //하위 - , 가격, 식권 수, 판매 식권 수, 식당, 음식 카테고리, Ticket(Fk)

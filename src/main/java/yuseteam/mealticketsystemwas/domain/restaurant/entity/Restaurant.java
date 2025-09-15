@@ -1,9 +1,10 @@
-package yuseteam.mealticketsystemwas.entity;
+package yuseteam.mealticketsystemwas.domain.restaurant.entity;
 
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import yuseteam.mealticketsystemwas.entity.Menu;
 
 import java.util.List;
 
