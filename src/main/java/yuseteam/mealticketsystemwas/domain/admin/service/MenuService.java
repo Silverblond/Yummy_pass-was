@@ -10,7 +10,7 @@ import yuseteam.mealticketsystemwas.domain.admin.dto.MenuResponse;
 import yuseteam.mealticketsystemwas.domain.admin.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
-import yuseteam.mealticketsystemwas.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.admin.entity.Menu;
 
 import java.util.List;
 

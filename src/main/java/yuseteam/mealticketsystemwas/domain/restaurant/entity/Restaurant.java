@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yuseteam.mealticketsystemwas.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.admin.entity.Menu;
 
 import java.util.List;
 

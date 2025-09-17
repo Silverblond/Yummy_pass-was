@@ -3,7 +3,7 @@ package yuseteam.mealticketsystemwas.domain.admin.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Builder;
-import yuseteam.mealticketsystemwas.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.admin.entity.Menu;
 
 @Getter
 @Builder
