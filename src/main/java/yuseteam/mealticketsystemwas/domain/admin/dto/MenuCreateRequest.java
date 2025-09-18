@@ -1,4 +1,4 @@
-package yuseteam.mealticketsystemwas.admin.dto;
+package yuseteam.mealticketsystemwas.domain.admin.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
