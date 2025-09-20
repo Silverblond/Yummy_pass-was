@@ -50,13 +50,10 @@ public class S3Service {
         }
     }
 
-    /** 키 규칙(이미지/상태) */
     public String imageKey(String uuid) { return "qr-images/%s.png".formatted(uuid); }
     public String statusKey(String uuid) { return "qr-status/%s.txt".formatted(uuid); }
 
-    /** public URL (버킷이 퍼블릭이거나 CloudFront 뒤면 정책에 맞게 접근 가능) */
     private String publicUrl(String key) {
-        // 리전이 필요하면 S3 클라이언트 리전 사용
         String region = amazonS3.getRegionName();
         return "https://%s.s3.%s.amazonaws.com/%s".formatted(bucket, region, key);
     }
