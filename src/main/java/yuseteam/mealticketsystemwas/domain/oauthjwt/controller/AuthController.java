@@ -14,11 +14,13 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignInReqDto;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignInResDto;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.SignUpReqDto;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.service.InMemoryLogoutTokenService;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.service.UserService;
 
 @Tag(name = "Auth", description = "인증/회원가입·로그인 API")
@@ -28,6 +30,7 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.service.UserService;
 public class AuthController {
 
     private final UserService userService;
+    private final InMemoryLogoutTokenService logoutTokenService;
 
     @Operation(
             summary = "회원가입",
@@ -98,5 +101,29 @@ public class AuthController {
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new SignInResDto(null, e.getMessage(), null));
         }
+    }
+
+    @Operation(
+        summary = "로그아웃",
+        description = "Authorization 헤더의 JWT를 블랙리스트에 등록하여 만료 전까지 무효화합니다."
+    )
+    @ApiResponses(value = {
+        @ApiResponse(responseCode = "200", description = "로그아웃 성공",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(example = "\"로그아웃 성공\""))
+        ),
+        @ApiResponse(responseCode = "400", description = "토큰 없음 또는 잘못된 토큰",
+            content = @Content(mediaType = "application/json",
+                schema = @Schema(example = "\"유효하지 않은 토큰입니다.\""))
+        )
+    })
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(
+            @RequestHeader(value = "Authorization", required = false) String authorizationHeader) {
+        if (authorizationHeader == null || authorizationHeader.isBlank()) {
+            return ResponseEntity.badRequest().body("유효하지 않은 토큰입니다.");
+        }
+        logoutTokenService.blacklistToken(authorizationHeader);
+        return ResponseEntity.ok("로그아웃 성공");
     }
 }
