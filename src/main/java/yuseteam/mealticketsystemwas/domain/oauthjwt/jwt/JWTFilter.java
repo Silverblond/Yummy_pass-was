@@ -8,6 +8,8 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.UserDTO;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 
 import java.io.IOException;
@@ -52,8 +54,22 @@ public class JWTFilter extends OncePerRequestFilter {
 
         Long userId = jwtService.parseUserId(tokenValue);
 
+        User user = userRepository.findById(userId)
+                .orElse(null); // 사용자가 없으면 null
 
-        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userId, null, null);
+        if (user == null) {
+            response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            response.getWriter().write("User not found.");
+            return;
+        }
+
+        UserDTO userDTO = new UserDTO();
+        userDTO.setId(user.getId());
+        userDTO.setRole(user.getRole());
+        userDTO.setName(user.getName());
+        userDTO.setSocialname(user.getSocialname());
+
+        UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(userDTO, null, null);
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         Cookie cookie = new Cookie("Authorization", authToken);
