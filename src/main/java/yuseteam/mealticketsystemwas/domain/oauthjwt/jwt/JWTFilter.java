@@ -8,15 +8,18 @@ import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.OncePerRequestFilter;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 
 import java.io.IOException;
 
 public class JWTFilter extends OncePerRequestFilter {
 
     private final JWTService jwtService;
+    private final UserRepository userRepository;
 
-    public JWTFilter(JWTService jwtService) {
+    public JWTFilter(JWTService jwtService, UserRepository userRepository) {
         this.jwtService = jwtService;
+        this.userRepository = userRepository;
     }
 
     @Override
