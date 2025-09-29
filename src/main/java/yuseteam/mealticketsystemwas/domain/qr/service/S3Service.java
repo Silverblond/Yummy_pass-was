@@ -53,7 +53,7 @@ public class S3Service {
     public String imageKey(String uuid) { return "qr-images/%s.png".formatted(uuid); }
     public String statusKey(String uuid) { return "qr-status/%s.txt".formatted(uuid); }
 
-    private String publicUrl(String key) {
+    public String publicUrl(String key) {
         String region = amazonS3.getRegionName();
         return "https://%s.s3.%s.amazonaws.com/%s".formatted(bucket, region, key);
     }

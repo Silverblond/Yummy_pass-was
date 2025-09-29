@@ -16,6 +16,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrUseRequest;
 import yuseteam.mealticketsystemwas.domain.qr.service.S3Service;
 
 import java.io.ByteArrayOutputStream;
@@ -38,12 +41,14 @@ public class QrController {
                             responseCode = "200",
                             description = "QR 생성/업로드 성공",
                             content = @Content(
-                                    mediaType = MediaType.TEXT_PLAIN_VALUE,
-                                    schema = @Schema(implementation = String.class),
-                                    examples = @ExampleObject(
-                                            name = "성공 예시",
-                                            value = "QR 업로드 완료\nuuid: 8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a\nimageUrl: https://your-bucket.s3.ap-northeast-2.amazonaws.com/qr-images/8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a.png"
-                                    )
+                                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                                    schema = @Schema(implementation = QrCreateResponse.class),
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "성공 예시",
+                                                    value = "{\"uuid\":\"8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a\",\"imageUrl\":\"https://your-bucket.s3.ap-northeast-2.amazonaws.com/qr-images/8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a.png\"}"
+                                            )
+                                    }
                             )
                     ),
                     @ApiResponse(
@@ -52,13 +57,18 @@ public class QrController {
                             content = @Content(
                                     mediaType = MediaType.TEXT_PLAIN_VALUE,
                                     schema = @Schema(implementation = String.class),
-                                    examples = @ExampleObject(value = "QR 생성/업로드 실패: The bucket is in this region: us-east-1 ...")
+                                    examples = {
+                                            @ExampleObject(
+                                                    name = "실패 예시",
+                                                    value = "QR 생성/업로드 실패: The bucket is in this region: us-east-1 ..."
+                                            )
+                                    }
                             )
                     )
             }
     )
     @PostMapping()
-    public ResponseEntity<String> createMealTicketQr() {
+    public ResponseEntity<QrCreateResponse> createMealTicketQr() {
         try {
             String uuid = UUID.randomUUID().toString();
             String contents = "https://localhost:8080/api/qr/use?uuid=" + uuid; // 서버 배포 후 수정 필요
@@ -77,17 +87,12 @@ public class QrController {
 
             s3.saveQrStatus(uuid, false);
 
-            String body = """
-                    QR 업로드 완료
-                    uuid: %s
-                    imageUrl: %s
-                    """.formatted(uuid, imageUrl);
-            return ResponseEntity.ok(body);
+            return ResponseEntity.ok(new QrCreateResponse(uuid, imageUrl));
 
         } catch (Exception e) {
             log.error("QR 생성 실패", e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body("QR 생성/업로드 실패: " + e.getMessage());
+                    .body(null);
         }
     }
 
@@ -140,39 +145,39 @@ public class QrController {
     }
 
     @Operation(
-            summary = "QR 사용",
-            description = "QR을 사용 처리하고(상태를 true로 갱신), 해당 QR 이미지 파일을 S3에서 삭제합니다.",
-            responses = {
-                    @ApiResponse(
-                            responseCode = "200",
-                            description = "정상 처리(이미 사용된 경우도 200으로 메시지 안내)",
-                            content = @Content(
-                                    mediaType = MediaType.TEXT_PLAIN_VALUE,
-                                    schema = @Schema(implementation = String.class),
-                                    examples = {
-                                            @ExampleObject(name = "성공", value = "QR 사용 성공 (uuid=8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a)"),
-                                            @ExampleObject(name = "이미 사용됨", value = "이미 사용된 QR입니다.")
-                                    }
-                            )
-                    ),
-                    @ApiResponse(
-                            responseCode = "404",
-                            description = "존재하지 않는 QR",
-                            content = @Content(
-                                    mediaType = MediaType.TEXT_PLAIN_VALUE,
-                                    schema = @Schema(implementation = String.class),
-                                    examples = @ExampleObject(value = "존재하지 않는 QR입니다.")
-                            )
+        summary = "QR 정보 조회",
+        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.",
+        responses = {
+            @ApiResponse(
+                responseCode = "200",
+                description = "QR 정보 조회 성공",
+                content = @Content(
+                    mediaType = MediaType.APPLICATION_JSON_VALUE,
+                    schema = @Schema(implementation = QrInfoResponse.class),
+                    examples = @ExampleObject(
+                        name = "성공 예시",
+                        value = "{\"uuid\":\"8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a\",\"imageUrl\":\"https://your-bucket.s3.ap-northeast-2.amazonaws.com/qr-images/8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a.png\",\"used\":false}"
                     )
-            }
+                )
+            ),
+            @ApiResponse(
+                responseCode = "404",
+                description = "존재하지 않는 QR",
+                content = @Content(
+                    mediaType = MediaType.TEXT_PLAIN_VALUE,
+                    schema = @Schema(implementation = String.class),
+                    examples = @ExampleObject(value = "존재하지 않는 QR입니다.")
+                )
+            )
+        }
     )
     @GetMapping("/info")
-    public ResponseEntity<String> getQrInfo(@RequestParam String uuid) {
+    public ResponseEntity<?> getQrInfo(@RequestParam String uuid) {
         Boolean used = s3.getQrStatus(uuid);
         if (used == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }
-        String status = used ? "사용됨" : "미사용";
-        return ResponseEntity.ok("QR 상태: " + status);
+        String imageUrl = s3.publicUrl(s3.imageKey(uuid));
+        return ResponseEntity.ok(new QrInfoResponse(uuid, imageUrl, used));
     }
 }
