@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.*;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuCreateResponse;
 import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuResponse;
+import yuseteam.mealticketsystemwas.domain.menu.dto.AdminMenuUpdateRequest;
 import yuseteam.mealticketsystemwas.domain.menu.service.AdminMenuService;
 
 import java.util.List;
@@ -34,5 +35,11 @@ public class AdminMenuController {
     @GetMapping("/menu")
     public ResponseEntity<List<AdminMenuResponse>> getMenus(){
         return ResponseEntity.ok(menuService.getMenus());
+    }
+
+    @PatchMapping("/menu/{menuId}")
+    public ResponseEntity<AdminMenuResponse> updateMenu(@PathVariable Long menuId, @Valid @RequestBody AdminMenuUpdateRequest req){
+        AdminMenuResponse updateMenu = menuService.updateMenu(menuId, req);
+        return ResponseEntity.ok(updateMenu);
     }
 }
