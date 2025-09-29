@@ -37,7 +37,7 @@ public class QrController {
 
     @Operation(
             summary = "식권 QR 생성",
-            description = "식권용 QR 코드를 생성하여 S3에 PNG로 업로드하고, QR의 사용상태(초기값 false)를 저장합니다.",
+            description = "식권용 QR 코드를 생성하여 S3에 PNG로 업로드하고, QR의 사용상태(초기값 false)를 저장합니다.\n\n**권한:** STUDENT",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -101,7 +101,7 @@ public class QrController {
 
     @Operation(
             summary = "QR 사용",
-            description = "QR을 사용 처리하고(상태를 true로 갱신), 해당 QR 이미지 파일을 S3에서 삭제합니다.",
+            description = "QR을 사용 처리하고(상태를 true로 갱신), 해당 QR 이미지 파일을 S3에서 삭제합니다.\n\n**권한:** STUDENT",
             responses = {
                     @ApiResponse(
                             responseCode = "200",
@@ -150,7 +150,7 @@ public class QrController {
 
     @Operation(
         summary = "QR 정보 조회",
-        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.",
+        description = "uuid로 QR 이미지 URL과 사용 상태를 조회합니다.\n\n**권한:** STUDENT",
         responses = {
             @ApiResponse(
                 responseCode = "200",
