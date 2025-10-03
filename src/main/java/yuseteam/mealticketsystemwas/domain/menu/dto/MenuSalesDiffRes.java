@@ -8,10 +8,9 @@ import java.util.Map;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class MenuSalesDiffRes {
     private Map<Long, Integer> salesDiff;
     private LocalDateTime lastRecordedAt;
     private LocalDateTime previousRecordedAt;
-
-
 }
