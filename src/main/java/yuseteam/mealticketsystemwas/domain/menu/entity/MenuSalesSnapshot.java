@@ -28,4 +28,21 @@ public class MenuSalesSnapshot {
     //현재 판매량 및 시간
     private Integer currentSalesCount;
     private LocalDateTime currentRecordedAt;
+
+    public void updateSnapshot(int newSalesCount, LocalDateTime newRecordTime) {
+        //현재 -> 이전
+        this.previousSalesCount = this.currentSalesCount;
+        this.previousRecordedAt = this.currentRecordedAt;
+
+        //신규 -> 현재
+        this.currentSalesCount = newSalesCount;
+        this.currentRecordedAt = newRecordTime;
+    }
+
+    public int getSalesDiff() {
+        if (previousSalesCount == null || currentSalesCount == null) {
+            return 0;
+        }
+        return currentSalesCount - previousSalesCount;
+    }
 }
