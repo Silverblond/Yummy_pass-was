@@ -109,13 +109,13 @@ public class OrderService {
                 Ticket t = Ticket.builder()
                         .menuName(oi.getMenuNameSnapshot())
                         .qrCode(qr.getUuid())
-                        .restaurant(oi.getRestaurantNameSnapshot())
                         .isUsed(false)
                         .purchaseTime(LocalDateTime.now())
-                        .menu(oi.getMenu())
                         .user(user)
+                        .orderItem(oi)
                         .build();
 
+                oi.getTickets().add(t);
                 ticketRepository.save(t);
 
                 issuedTickets.add(OrderCreatedRes.IssuedTicket.builder()

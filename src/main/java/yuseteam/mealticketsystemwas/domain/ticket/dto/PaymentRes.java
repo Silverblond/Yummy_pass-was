@@ -18,14 +18,15 @@ public class PaymentRes {
     private boolean isUsed;
 
     public static PaymentRes from(Ticket ticket) {
+        var oi = ticket.getOrderItem();
         return PaymentRes.builder()
                 .ticketId(ticket.getId())
                 .qrUuid(ticket.getQrCode())
-                .isUsed(ticket.getIsUsed())
-                .menuName(ticket.getMenuName())
+                .isUsed(Boolean.TRUE.equals(ticket.getIsUsed()))
                 .purchaseTime(ticket.getPurchaseTime())
-                .restaurantName(ticket.getRestaurant())
-                .category(ticket.getMenu().getCategory())
+                .menuName(oi.getMenuNameSnapshot())
+                .restaurantName(oi.getRestaurantNameSnapshot())
+                .category(oi.getMenu().getCategory())
                 .build();
     }
 }

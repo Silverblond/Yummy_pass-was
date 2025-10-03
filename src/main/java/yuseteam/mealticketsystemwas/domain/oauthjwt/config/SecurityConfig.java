@@ -93,6 +93,8 @@ public class SecurityConfig {
                                 "/api/menus/**",
                                 "/api/restaurants",
                                 "/api/orders/**",
+                                "/api/admin/**",
+                                "/api/orders/**",
                                 "/api/admin/**"
                         ).permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
                         .anyRequest().authenticated()

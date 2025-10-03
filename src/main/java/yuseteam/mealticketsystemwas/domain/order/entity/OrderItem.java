@@ -3,6 +3,7 @@ package yuseteam.mealticketsystemwas.domain.order.entity;
 import jakarta.persistence.*;
 import lombok.*;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 
 @Entity
 @Getter
@@ -27,6 +28,10 @@ public class OrderItem {
     @JoinColumn(name = "order_id")
     @Setter
     private Order order;
+
+    @Builder.Default
+    @OneToMany(mappedBy = "orderItem", cascade = CascadeType.ALL, orphanRemoval = true)
+    private java.util.List<yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket> tickets = new java.util.ArrayList<>();
 
     public static OrderItem of(Menu menu, int quantity) {
         int unitPrice = menu.getPrice();
