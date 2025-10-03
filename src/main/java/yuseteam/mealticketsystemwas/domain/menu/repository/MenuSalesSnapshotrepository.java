@@ -7,4 +7,5 @@ import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
 import java.util.Optional;
 
 public interface MenuSalesSnapshotrepository extends JpaRepository<MenuSalesSnapshot, Long> {
+    Optional<MenuSalesSnapshot> findByMenu(Menu menu);
 }
