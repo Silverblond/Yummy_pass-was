@@ -13,15 +13,15 @@ public class OrderItem {
     @Id @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String menuNameSnapshot;        // 주문 시점 메뉴명 스냅샷
-    private String restaurantNameSnapshot;  // 주문 시점 식당명 스냅샷
-    private int unitPrice;                  // 주문 시점 단가
-    private int quantity;                   // 수량
-    private int lineTotal;                  // unitPrice * quantity
+    private String menuNameSnapshot;
+    private String restaurantNameSnapshot;
+    private int unitPrice;
+    private int quantity;
+    private int lineTotal;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "menu_id")
-    private Menu menu;                      // 원본 참조
+    private Menu menu;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "order_id")
