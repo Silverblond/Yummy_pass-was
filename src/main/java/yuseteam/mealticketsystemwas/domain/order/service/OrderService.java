@@ -32,7 +32,6 @@ public class OrderService {
     private final TicketRepository ticketRepository;
     private final QrService qrService;
 
-    /** 장바구니(바디) 미리보기 계산 — DB 저장 없음 */
     @Transactional(readOnly = true)
     public OrderSummaryRes summarize(List<CreateOrderReq.Item> items) {
         int totalQty = 0;
@@ -67,7 +66,6 @@ public class OrderService {
                 .build();
     }
 
-    /** 결제(주문 확정) + Ticket 발급 */
     @Transactional
     public OrderCreatedRes checkout(Long userId, CreateOrderReq body) {
         if (body == null || body.getItems() == null || body.getItems().isEmpty()) {
@@ -82,7 +80,6 @@ public class OrderService {
                 .orderedAt(LocalDateTime.now())
                 .build();
 
-        // 1) 각 메뉴 비관적 락으로 조회, 재고 체크/판매량 증가
         for (CreateOrderReq.Item reqItem : body.getItems()) {
             Menu menu = menuRepository.findAndLockById(reqItem.getMenuId())
                     .orElseThrow(() -> new IllegalArgumentException("메뉴를 찾을 수 없습니다."));
@@ -90,12 +87,10 @@ public class OrderService {
             int qty = reqItem.getQuantity();
             if (qty <= 0) continue;
 
-            // 재고 확인: soldTicket < totalCount
             for (int i = 0; i < qty; i++) {
-                menu.sellTicket(); // 내부에서 초과 시 예외 발생
+                menu.sellTicket();
             }
 
-            // 2) OrderItem 생성/추가
             OrderItem oi = OrderItem.of(menu, qty);
             order.addItem(oi);
         }
@@ -104,10 +99,8 @@ public class OrderService {
             throw new IllegalArgumentException("유효한 주문 항목이 없습니다.");
         }
 
-        // 3) 주문 저장
         orderRepository.save(order);
 
-        // 4) Ticket 발급 (수량만큼)
         List<OrderCreatedRes.IssuedTicket> issuedTickets = new ArrayList<>();
         for (OrderItem oi : order.getItems()) {
             for (int i = 0; i < oi.getQuantity(); i++) {
@@ -132,7 +125,6 @@ public class OrderService {
             }
         }
 
-        // 5) 응답 조립
         List<OrderCreatedRes.CreatedItem> created = new ArrayList<>();
         order.getItems().forEach(oi -> created.add(OrderCreatedRes.CreatedItem.builder()
                 .menuId(oi.getMenu().getId())
