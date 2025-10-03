@@ -4,8 +4,10 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
+import yuseteam.mealticketsystemwas.domain.order.entity.OrderItem;
 
 import java.time.LocalDateTime;
 
@@ -17,11 +19,7 @@ public class Ticket {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String menuName;
-
     private String qrCode;
-
-    private String restaurant;
 
     @Column(nullable = false)
     private Boolean isUsed;
@@ -33,18 +31,17 @@ public class Ticket {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name ="menu_id")
-    private Menu menu;
-    //임시
+    @JoinColumn(name = "order_item_id")
+    @Setter
+    private OrderItem orderItem;
+
     @Builder // 빌더 패턴 적용
-    public Ticket(String menuName, String qrCode, String restaurant, boolean isUsed, LocalDateTime purchaseTime, Menu menu, User user) {
-        this.menuName = menuName;
+    public Ticket(String menuName, String qrCode, boolean isUsed, LocalDateTime purchaseTime, User user, OrderItem orderItem) {
         this.qrCode = qrCode;
-        this.restaurant = restaurant;
         this.isUsed = isUsed;
         this.purchaseTime = purchaseTime;
-        this.menu = menu;
         this.user = user;
+        this.orderItem = orderItem;
     }
 
     public void use() {

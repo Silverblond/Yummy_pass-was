@@ -28,13 +28,9 @@ public class Menu {
     private String category;
     private Boolean visible = true;
 
-
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "restaurant_id")
     private Restaurant restaurant;
-
-    @OneToMany(mappedBy = "menu")
-    private List<Ticket> tickets;
 
     public void update(AdminMenuUpdateRequest req) {
         if (req.getName() != null) {

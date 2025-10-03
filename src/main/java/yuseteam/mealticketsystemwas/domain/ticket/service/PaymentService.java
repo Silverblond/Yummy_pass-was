@@ -47,10 +47,8 @@ public class PaymentService {
         Ticket newTicket = Ticket.builder()
                 .menuName(menu.getName())
                 .qrCode(qrInfo.getUuid())
-                .restaurant(menu.getRestaurant().getName())
                 .isUsed(false)
                 .purchaseTime(LocalDateTime.now())
-                .menu(menu)
                 .user(user)
                 .build();
 
