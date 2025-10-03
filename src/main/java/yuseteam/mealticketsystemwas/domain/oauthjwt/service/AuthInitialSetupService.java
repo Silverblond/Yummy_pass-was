@@ -104,7 +104,6 @@ public class AuthInitialSetupService {
 
         body.put("message", "initial setup complete");
         body.put("id", user.getId());
-        body.put("userId", user.getId());
         body.put("role", user.getRole().name());
         body.put("phone", user.getPhone());
         body.put("token", newToken);
