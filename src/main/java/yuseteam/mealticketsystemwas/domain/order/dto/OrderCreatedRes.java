@@ -12,8 +12,8 @@ public class OrderCreatedRes {
     private int totalQuantity;
     private int totalAmount;
 
-    private List<CreatedItem> items;       // 라인별 정보
-    private List<IssuedTicket> tickets;    // 발급된 티켓 요약
+    private List<CreatedItem> items;
+    private List<IssuedTicket> tickets;
 
     @Getter @Builder
     public static class CreatedItem {
