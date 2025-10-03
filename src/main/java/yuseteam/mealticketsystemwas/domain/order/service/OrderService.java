@@ -45,7 +45,6 @@ public class OrderService {
             int unit = menu.getPrice();
             int requestedQty = Math.max(0, reqItem.getQuantity());
 
-            // 재고(남은 수량) 계산: totalCount - soldTicket
             int remaining = menu.getTotalCount() - menu.getSoldTicket();
             if (requestedQty > remaining) {
                 throw new IllegalArgumentException(
