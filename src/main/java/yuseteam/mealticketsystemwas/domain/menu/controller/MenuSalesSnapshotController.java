@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesDiffRes;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuSalesSnapshotrepository;
-import yuseteam.mealticketsystemwas.domain.menu.service.MenuSalesSnapshotService;
 
 import java.time.LocalDateTime;
 import java.util.HashMap;
@@ -22,7 +21,6 @@ import java.util.Map;
 @Slf4j
 public class MenuSalesSnapshotController {
 
-    private final MenuSalesSnapshotService menuSalesSnapshotService;
     private final MenuSalesSnapshotrepository menuSalesSnapshotrepository;
 
     @GetMapping("/sales-diff")
@@ -40,7 +38,7 @@ public class MenuSalesSnapshotController {
         }
 
         Map<Long, Integer> salesDiffMap = new HashMap<>();
-        LocalDateTime lastestTime = null;
+        LocalDateTime latestTime = null;
         LocalDateTime previousTime = null;
 
         for (MenuSalesSnapshot snapshot : snapshots) {
@@ -48,15 +46,15 @@ public class MenuSalesSnapshotController {
             int diff = snapshot.getSalesDiff();
             salesDiffMap.put(menuId, diff);
 
-            if (lastestTime == null) {
-                lastestTime = snapshot.getCurrentRecordedAt();
+            if (latestTime == null) {
+                latestTime = snapshot.getCurrentRecordedAt();
                 previousTime = snapshot.getPreviousRecordedAt();
             }
         }
 
         MenuSalesDiffRes res = MenuSalesDiffRes.builder()
                 .salesDiff(salesDiffMap)
-                .lastRecordedAt(lastestTime)
+                .lastRecordedAt(latestTime)
                 .previousRecordedAt(previousTime)
                 .build();
 
