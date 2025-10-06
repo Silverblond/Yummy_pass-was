@@ -4,13 +4,16 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesDiffRes;
+import yuseteam.mealticketsystemwas.domain.menu.dto.MenuSalesGraphRes;
+import yuseteam.mealticketsystemwas.domain.menu.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.entity.MenuSalesSnapshot;
+import yuseteam.mealticketsystemwas.domain.menu.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.menu.repository.MenuSalesSnapshotrepository;
+import yuseteam.mealticketsystemwas.domain.menu.service.MenuSalesSnapshotService;
 
-import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,42 +25,27 @@ import java.util.Map;
 public class MenuSalesSnapshotController {
 
     private final MenuSalesSnapshotrepository menuSalesSnapshotrepository;
+    private final MenuRepository menuRepository;
+    private final MenuSalesSnapshotService menuSalesSnapshotService;
 
     @GetMapping("/sales-diff")
-    public ResponseEntity<MenuSalesDiffRes> getSalesDiff() {
-        List<MenuSalesSnapshot> snapshots = menuSalesSnapshotrepository.findAll();
+    public ResponseEntity<Map<Long, Integer>> getLatestIntervalSales() {
+        List<Menu> menus = menuRepository.findAll();
+        Map<Long, Integer> res = new HashMap<>();
 
-        //데이터베이스에 없는 경우
-        if(snapshots.isEmpty()) {
-            log.warn("저장된 스냅샷 데이터가 없습니다. 스케줄러가 아직 실행되지 않았을 수 있습니다.");
-            return ResponseEntity.ok(MenuSalesDiffRes.builder()
-                    .salesDiff(new HashMap<>())
-                    .lastRecordedAt(null)
-                    .previousRecordedAt(null)
-                    .build());
+        for(Menu menu : menus) {
+            Integer latestSales = menuSalesSnapshotrepository
+                    .findTopByMenuOrderBySnapshotTimeDesc(menu)
+                    .map(MenuSalesSnapshot::getSalesInInterval)
+                    .orElse(0);
+            res.put(menu.getId(), latestSales);
         }
-
-        Map<Long, Integer> salesDiffMap = new HashMap<>();
-        LocalDateTime latestTime = null;
-        LocalDateTime previousTime = null;
-
-        for (MenuSalesSnapshot snapshot : snapshots) {
-            Long menuId = snapshot.getMenu().getId();
-            int diff = snapshot.getSalesDiff();
-            salesDiffMap.put(menuId, diff);
-
-            if (latestTime == null) {
-                latestTime = snapshot.getCurrentRecordedAt();
-                previousTime = snapshot.getPreviousRecordedAt();
-            }
-        }
-
-        MenuSalesDiffRes res = MenuSalesDiffRes.builder()
-                .salesDiff(salesDiffMap)
-                .lastRecordedAt(latestTime)
-                .previousRecordedAt(previousTime)
-                .build();
-
         return ResponseEntity.ok(res);
+    }
+
+    @GetMapping("/{menuId}/today-sales-graph")
+    public ResponseEntity<MenuSalesGraphRes> getTodaySales(@PathVariable Long menuId) {
+        MenuSalesGraphRes response = menuSalesSnapshotService.getMenuSalesSnapshot(menuId);
+        return ResponseEntity.ok(response);
     }
 }
