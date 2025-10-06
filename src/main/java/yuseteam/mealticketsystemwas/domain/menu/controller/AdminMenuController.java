@@ -60,5 +60,4 @@ public class AdminMenuController {
     public ResponseEntity<List<String>> getCategoreisByRestaurant(@PathVariable Long restaurantId){
         return ResponseEntity.ok(menuService.getCategoriesByRestaurant(restaurantId));
     }
-
 }
