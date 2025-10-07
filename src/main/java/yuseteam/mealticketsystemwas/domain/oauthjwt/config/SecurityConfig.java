@@ -1,7 +1,6 @@
 package yuseteam.mealticketsystemwas.domain.oauthjwt.config;
 
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
@@ -94,7 +93,8 @@ public class SecurityConfig {
                                 "/api/restaurants",
                                 "/api/orders/**",
                                 "/api/admin/**",
-                                "/api/auth/initial-setup"
+                                "/api/auth/initial-setup",
+                                "/api/tickets/**"
                         ).permitAll() //지금 임시로 열어두는것, 나중에 지우고 위에것으로 사용할 것.
                         .anyRequest().authenticated()
                 )
