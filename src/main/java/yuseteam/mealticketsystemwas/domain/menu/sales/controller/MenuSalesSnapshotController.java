@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +29,7 @@ import java.util.Map;
 @RequestMapping("/api/menus/sales-snapshots")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Sales", description = "판매량·인기메뉴·그래프 관련 API")
 public class MenuSalesSnapshotController {
 
     private final MenuSalesSnapshotrepository menuSalesSnapshotrepository;
