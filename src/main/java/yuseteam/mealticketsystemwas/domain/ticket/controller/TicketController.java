@@ -21,4 +21,10 @@ public class TicketController {
         List<TicketResponse> expiredTickets = ticketService.getExpiredTickets();
         return ResponseEntity.ok(expiredTickets);
     }
+
+    @GetMapping("/unused")
+    public ResponseEntity<List<TicketResponse>> getUnusedTickets() {
+        List<TicketResponse> unusedTickets = ticketService.getUnusedTickets();
+        return ResponseEntity.ok(unusedTickets);
+    }
 }
