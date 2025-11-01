@@ -10,6 +10,7 @@ import lombok.Setter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.RoleType;
+import yuseteam.mealticketsystemwas.domain.oauthjwt.dto.InitialSetupReqDTO;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.jwt.JWTUtil;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
@@ -28,16 +29,8 @@ public class AuthInitialSetupService {
         this.jwtUtil = jwtUtil;
     }
 
-    @Getter @Setter
-    public static class InitialSetupRequest {
-        @NotNull
-        private RoleType role;
-        @NotBlank
-        private String phone;
-    }
-
     @Transactional
-    public Map<String, Object> initialSetup(InitialSetupRequest req,
+    public Map<String, Object> initialSetup(InitialSetupReqDTO req,
                                             HttpServletRequest request,
                                             HttpServletResponse response) {
         Map<String, Object> body = new LinkedHashMap<>();
