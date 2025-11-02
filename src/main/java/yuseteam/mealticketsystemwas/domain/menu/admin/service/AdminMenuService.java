@@ -6,10 +6,10 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateResponse;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuResponse;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateReq;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRes;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuRes;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateReq;
 import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
@@ -27,7 +27,7 @@ public class AdminMenuService {
     private final MenuS3Service s3Service;
 
     @Transactional
-    public AdminMenuCreateResponse createMenu(AdminMenuCreateRequest req) {
+    public AdminMenuCreateRes createMenu(AdminMenuCreateReq req) {
         Restaurant restaurant = restaurantRepository.findById(req.getRestaurantId())
                 .orElseThrow(() -> new EntityNotFoundException("해당 식당을 찾을 수 없습니다."));
 
@@ -48,7 +48,7 @@ public class AdminMenuService {
         }
 
         Menu saveMenu = menuRepository.save(menu);
-        return AdminMenuCreateResponse.from(saveMenu);
+        return AdminMenuCreateRes.from(saveMenu);
     }
 
 
@@ -65,23 +65,23 @@ public class AdminMenuService {
     }
 
     @Transactional(readOnly = true)
-    public List<AdminMenuResponse> getMenus() {
+    public List<AdminMenuRes> getMenus() {
         return menuRepository.findAll()
                 .stream()
                 .sorted(Comparator.comparingInt(menu -> menu.getCategory().getSort()))
-                .map(AdminMenuResponse::from)
+                .map(AdminMenuRes::from)
                 .toList();
     }
 
     @Transactional
-    public AdminMenuResponse getMenu(Long menuId) {
+    public AdminMenuRes getMenu(Long menuId) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(()->new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
-        return AdminMenuResponse.from(menu);
+        return AdminMenuRes.from(menu);
     }
   
     @Transactional
-    public AdminMenuResponse updateMenu(Long menuId, @Valid AdminMenuUpdateRequest req) {
+    public AdminMenuRes updateMenu(Long menuId, @Valid AdminMenuUpdateReq req) {
         Menu menu = menuRepository.findById(menuId)
                 .orElseThrow(() -> new EntityNotFoundException("해당 메뉴를 찾을 수 없습니다."));
 
@@ -91,7 +91,7 @@ public class AdminMenuService {
         }
 
         menu.update(req);
-        return AdminMenuResponse.from(menu);
+        return AdminMenuRes.from(menu);
     }
 
     @Transactional

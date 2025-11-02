@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRequest;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateResponse;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuResponse;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateReq;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRes;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuRes;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateReq;
 import yuseteam.mealticketsystemwas.domain.menu.admin.service.AdminMenuService;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
@@ -23,8 +23,8 @@ public class AdminMenuController {
 
     //메뉴 등록
     @PostMapping("/menu")
-    public ResponseEntity<AdminMenuCreateResponse> createMenu(@ModelAttribute AdminMenuCreateRequest req) {
-        AdminMenuCreateResponse created = menuService.createMenu(req);
+    public ResponseEntity<AdminMenuCreateRes> createMenu(@ModelAttribute AdminMenuCreateReq req) {
+        AdminMenuCreateRes created = menuService.createMenu(req);
         return ResponseEntity.ok(created);
     }
 
@@ -36,21 +36,21 @@ public class AdminMenuController {
     }
     //전체 메뉴 조회
     @GetMapping("/menu")
-    public ResponseEntity<List<AdminMenuResponse>> getMenus(){
+    public ResponseEntity<List<AdminMenuRes>> getMenus(){
         return ResponseEntity.ok(menuService.getMenus());
     }
     
     //특정 메뉴 조회
     @GetMapping("/menu/{menuId}")
-    public ResponseEntity<AdminMenuResponse> getMenu(@PathVariable Long menuId){
-        AdminMenuResponse response = menuService.getMenu(menuId);
+    public ResponseEntity<AdminMenuRes> getMenu(@PathVariable Long menuId){
+        AdminMenuRes response = menuService.getMenu(menuId);
         return ResponseEntity.ok(response);
     }
   
     //메뉴 수정
     @PatchMapping("/menu/{menuId}")
-    public ResponseEntity<AdminMenuResponse> updateMenu(@PathVariable Long menuId, @ModelAttribute AdminMenuUpdateRequest req){
-        AdminMenuResponse updateMenu = menuService.updateMenu(menuId, req);
+    public ResponseEntity<AdminMenuRes> updateMenu(@PathVariable Long menuId, @ModelAttribute AdminMenuUpdateReq req){
+        AdminMenuRes updateMenu = menuService.updateMenu(menuId, req);
         return ResponseEntity.ok(updateMenu);
     }
 

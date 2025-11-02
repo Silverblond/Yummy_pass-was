@@ -6,18 +6,15 @@ import lombok.Setter;
 
 @Getter
 @Setter
-@Schema(description = "QR 정보 응답 DTO")
-public class QrInfoResponse {
+@Schema(description = "QR 생성 응답 DTO")
+public class QrCreateRes {
     @Schema(description = "QR uuid")
-    private String uuid;
+    private final String uuid;
     @Schema(description = "QR 이미지 URL")
-    private String imageUrl;
-    @Schema(description = "QR 사용 여부")
-    private boolean used;
+    private final String imageUrl;
 
-    public QrInfoResponse(String uuid, String imageUrl, boolean used) {
+    public QrCreateRes(String uuid, String imageUrl) {
         this.uuid = uuid;
         this.imageUrl = imageUrl;
-        this.used = used;
     }
 }

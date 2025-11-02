@@ -7,13 +7,13 @@ import lombok.Setter;
 @Getter
 @Setter
 @Schema(description = "QR 사용 요청 DTO")
-public class QrUseRequest {
+public class QrUseReq {
     @Schema(description = "QR uuid")
     private String uuid;
 
-    public QrUseRequest() {}
+    public QrUseReq() {}
 
-    public QrUseRequest(String uuid) {
+    public QrUseReq(String uuid) {
         this.uuid = uuid;
     }
 }
