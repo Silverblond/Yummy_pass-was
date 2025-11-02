@@ -3,8 +3,7 @@ package yuseteam.mealticketsystemwas.domain.restaurant.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import yuseteam.mealticketsystemwas.domain.restaurant.dto.RestaurantResponseDto;
-import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
+import yuseteam.mealticketsystemwas.domain.restaurant.dto.RestaurantResDto;
 import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
 import java.util.List;
@@ -17,9 +16,9 @@ public class RestaurantService {
     private final RestaurantRepository restaurantRepository;
 
     @Transactional(readOnly = true)
-    public List<RestaurantResponseDto> getAllRestaurants() {
+    public List<RestaurantResDto> getAllRestaurants() {
         return restaurantRepository.findAll().stream()
-                .map(RestaurantResponseDto::new)
+                .map(RestaurantResDto::new)
                 .collect(Collectors.toList());
     }
 }

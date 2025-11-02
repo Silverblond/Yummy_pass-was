@@ -7,7 +7,7 @@ import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.entity.User;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateRes;
 import yuseteam.mealticketsystemwas.domain.qr.service.QrService;
 import yuseteam.mealticketsystemwas.domain.ticket.dto.PaymentResDTO;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
@@ -40,7 +40,7 @@ public class PaymentService {
         menu.sellTicket();
 
         //4. QR 코드 생성
-         QrCreateResponse qrInfo = qrService.createAndUploadQr();
+         QrCreateRes qrInfo = qrService.createAndUploadQr();
 
         //5. Ticket 생성
         Ticket newTicket = Ticket.builder()

@@ -1,9 +1,5 @@
 package yuseteam.mealticketsystemwas.domain.qr.controller;
 
-import com.google.zxing.BarcodeFormat;
-import com.google.zxing.MultiFormatWriter;
-import com.google.zxing.client.j2se.MatrixToImageWriter;
-import com.google.zxing.common.BitMatrix;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.ExampleObject;
@@ -17,13 +13,10 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateRes;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoRes;
 import yuseteam.mealticketsystemwas.domain.qr.service.QrService;
 import yuseteam.mealticketsystemwas.domain.qr.service.S3Service;
-
-import java.io.ByteArrayOutputStream;
-import java.util.UUID;
 
 @Tag(name = "QR", description = "QR 코드 관련 API")
 @RestController
@@ -44,7 +37,7 @@ public class QrController {
                             description = "QR 생성/업로드 성공",
                             content = @Content(
                                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                                    schema = @Schema(implementation = QrCreateResponse.class),
+                                    schema = @Schema(implementation = QrCreateRes.class),
                                     examples = {
                                             @ExampleObject(
                                                     name = "성공 예시",
@@ -71,9 +64,9 @@ public class QrController {
     )
     @PostMapping()
     @PreAuthorize("hasRole('STUDENT')")
-    public ResponseEntity<QrCreateResponse> createMealTicketQr() {
+    public ResponseEntity<QrCreateRes> createMealTicketQr() {
         try {
-            QrCreateResponse res = qrService.createAndUploadQr();
+            QrCreateRes res = qrService.createAndUploadQr();
             return ResponseEntity.ok(res);
         } catch (Exception e) {
             log.error("QR 생성 실패", e);
@@ -130,7 +123,7 @@ public class QrController {
                 description = "QR 정보 조회 성공",
                 content = @Content(
                     mediaType = MediaType.APPLICATION_JSON_VALUE,
-                    schema = @Schema(implementation = QrInfoResponse.class),
+                    schema = @Schema(implementation = QrInfoRes.class),
                     examples = @ExampleObject(
                         name = "성공 예시",
                         value = "{\"uuid\":\"8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a\",\"imageUrl\":\"https://your-bucket.s3.ap-northeast-2.amazonaws.com/qr-images/8f2b1b3e-3c8c-4e47-9a6f-7f8b2c1d0e9a.png\",\"used\":false}"
@@ -151,7 +144,7 @@ public class QrController {
     @GetMapping("/info")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> getQrInfo(@RequestParam String uuid) {
-        QrInfoResponse info = qrService.getQrInfo(uuid);
+        QrInfoRes info = qrService.getQrInfo(uuid);
         if (info == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("존재하지 않는 QR입니다.");
         }

@@ -13,7 +13,7 @@ import yuseteam.mealticketsystemwas.domain.order.dto.OrderSummaryRes;
 import yuseteam.mealticketsystemwas.domain.order.entity.Order;
 import yuseteam.mealticketsystemwas.domain.order.entity.OrderItem;
 import yuseteam.mealticketsystemwas.domain.order.repository.OrderRepository;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateRes;
 import yuseteam.mealticketsystemwas.domain.qr.service.QrService;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
@@ -111,7 +111,7 @@ public class OrderService {
         List<OrderCreatedRes.IssuedTicket> issuedTickets = new ArrayList<>();
         for (OrderItem oi : order.getItems()) {
             for (int i = 0; i < oi.getQuantity(); i++) {
-                QrCreateResponse qr = qrService.createAndUploadQr();
+                QrCreateRes qr = qrService.createAndUploadQr();
 
                 Ticket t = Ticket.builder()
                         .menuName(oi.getMenuNameSnapshot())

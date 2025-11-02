@@ -10,8 +10,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.config.SecurityUtil;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateResponse;
-import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoResponse;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrCreateRes;
+import yuseteam.mealticketsystemwas.domain.qr.dto.QrInfoRes;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
 
@@ -26,7 +26,7 @@ public class QrService {
     private final TicketRepository ticketRepository;
 
     //ticket쪽에 생성하기 위한 메소드가 필요해서 controller->service단으로 이동
-    public QrCreateResponse createAndUploadQr() {
+    public QrCreateRes createAndUploadQr() {
         try {
             String uuid = UUID.randomUUID().toString();
             String contents = uuid;
@@ -43,7 +43,7 @@ public class QrService {
             String imgKey = s3Service.imageKey(uuid);
             String imageUrl = s3Service.uploadImageBytes(pngBytes, imgKey, MediaType.IMAGE_PNG_VALUE);
 
-            return new QrCreateResponse(uuid, imageUrl);
+            return new QrCreateRes(uuid, imageUrl);
 
         } catch (Exception e) {
             throw new RuntimeException("QR 생성 또는 업로드에 실패했습니다.", e);
@@ -79,13 +79,13 @@ public class QrService {
     }
 
     @Transactional(readOnly = true)
-    public QrInfoResponse getQrInfo(String uuid) {
+    public QrInfoRes getQrInfo(String uuid) {
         Ticket ticket = ticketRepository.findByQrCode(uuid).orElse(null);
         if (ticket == null) {
             return null;
         }
         String imageUrl = s3Service.publicUrl(s3Service.imageKey(uuid));
-        return new QrInfoResponse(uuid, imageUrl, Boolean.TRUE.equals(ticket.getIsUsed()));
+        return new QrInfoRes(uuid, imageUrl, Boolean.TRUE.equals(ticket.getIsUsed()));
     }
 
 }

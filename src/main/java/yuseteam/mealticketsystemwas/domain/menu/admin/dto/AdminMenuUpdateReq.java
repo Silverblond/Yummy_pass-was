@@ -6,7 +6,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 @Getter
 @NoArgsConstructor
-public class AdminMenuUpdateRequest {
+public class AdminMenuUpdateReq {
     private String name;
     private Integer price;
     private Integer totalCount;

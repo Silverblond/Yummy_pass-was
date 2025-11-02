@@ -1,11 +1,12 @@
 package yuseteam.mealticketsystemwas.domain.menu.common.entity;
 
 import jakarta.persistence.*;
+import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateRequest;
+import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateReq;
 import yuseteam.mealticketsystemwas.domain.menu.sales.entity.MenuSalesSnapshot;
 import yuseteam.mealticketsystemwas.domain.restaurant.entity.Restaurant;
 
@@ -43,7 +44,7 @@ public class Menu {
 
 
 
-    public void update(AdminMenuUpdateRequest req) {
+    public void update(@Valid AdminMenuUpdateReq req) {
         if (req.getName() != null) {
             this.name = req.getName();
         }

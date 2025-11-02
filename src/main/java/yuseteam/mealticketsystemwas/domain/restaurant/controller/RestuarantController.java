@@ -15,7 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-import yuseteam.mealticketsystemwas.domain.restaurant.dto.RestaurantResponseDto;
+import yuseteam.mealticketsystemwas.domain.restaurant.dto.RestaurantResDto;
 import yuseteam.mealticketsystemwas.domain.restaurant.service.RestaurantService;
 
 import java.util.List;
@@ -35,7 +35,7 @@ public class RestuarantController {
                     "요청이 성공적으로 처리되었으며, 응답 본문에 식당 목록이 포함됩니다." +
                     "식당이 하나도 없는 경우 빈 배열([])이 반환됩니다.",
                     content = @Content(mediaType = "application/json",
-                            schema = @Schema(implementation = RestaurantResponseDto.class),
+                            schema = @Schema(implementation = RestaurantResDto.class),
                     examples = @ExampleObject(
                             name = "성공적인 응답 예시",
                             value = "[{\"id\": 1, \"name\": \"학생회관\"}, {\"id\": 2, \"name\": \"자연계\"}, {\"id\": 3, \"name\": \"교직원\"}]")
@@ -63,7 +63,7 @@ public class RestuarantController {
     @GetMapping
     public ResponseEntity<?> getRestaurants() {
         try {
-            List<RestaurantResponseDto> restaurants = restaurantService.getAllRestaurants();
+            List<RestaurantResDto> restaurants = restaurantService.getAllRestaurants();
 
             if (restaurants.isEmpty()) //400
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("등록된 식당 정보가 없습니다.");

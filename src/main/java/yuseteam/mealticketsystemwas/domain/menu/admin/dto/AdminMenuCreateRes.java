@@ -1,15 +1,15 @@
 package yuseteam.mealticketsystemwas.domain.menu.admin.dto;
 
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.Builder;
+import lombok.Getter;
 import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
 import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 
 @Getter
 @Builder
 @AllArgsConstructor
-public class AdminMenuResponse {
+public class AdminMenuCreateRes {
     private final Long id;
     private final String name;
     private final String photoUrl;
@@ -18,10 +18,10 @@ public class AdminMenuResponse {
     private final int soldTicket;
     private final MenuCategory category;
     private final Boolean visible;
-    private final String restaurantName;
 
-    public static AdminMenuResponse from(Menu menu) {
-        return AdminMenuResponse.builder()
+
+    public static AdminMenuCreateRes from(Menu menu) {
+        return AdminMenuCreateRes.builder()
                 .id(menu.getId())
                 .name(menu.getName())
                 .photoUrl(menu.getPhotoUrl())
@@ -30,7 +30,6 @@ public class AdminMenuResponse {
                 .soldTicket(menu.getCumulativeSoldQuantity())
                 .category(menu.getCategory())
                 .visible(menu.getVisible())
-                .restaurantName(menu.getRestaurant().getName())
                 .build();
     }
 }

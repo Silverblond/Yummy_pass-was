@@ -11,7 +11,7 @@ import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 @Getter
 @Setter
 @NoArgsConstructor
-public class AdminMenuCreateRequest {
+public class AdminMenuCreateReq {
 
     private Long restaurantId;
     @NotBlank
