@@ -15,7 +15,6 @@ import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuCreateRes;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuRes;
 import yuseteam.mealticketsystemwas.domain.menu.admin.dto.AdminMenuUpdateReq;
 import yuseteam.mealticketsystemwas.domain.menu.admin.service.AdminMenuService;
-import yuseteam.mealticketsystemwas.domain.restaurant.repository.RestaurantRepository;
 
 import java.util.List;
 
@@ -25,7 +24,6 @@ import java.util.List;
 @Tag(name = "Admin Menu", description = "관리자 메뉴 관리 API")
 public class AdminMenuController {
     private final AdminMenuService menuService;
-    private final RestaurantRepository restaurantRepository;
 
     //메뉴 등록
     @PostMapping("/menu")
