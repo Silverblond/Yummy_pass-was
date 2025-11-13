@@ -5,6 +5,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuDetailResponse;
 import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.common.repository.MenuRepository;
 import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuResponse;
 
@@ -18,7 +19,7 @@ public class MenuService {
     private final MenuRepository menuRepository;
 
     @Transactional(readOnly = true)
-    public List<MenuResponse> getMenuByRestaurantAndCategory(Long restaurantId, String category) {
+    public List<MenuResponse> getMenuByRestaurantAndCategory(Long restaurantId, MenuCategory category) {
         return menuRepository.findByRestaurantIdAndCategory(restaurantId, category).stream()
                 .map(MenuResponse::new)
                 .collect(Collectors.toList());
