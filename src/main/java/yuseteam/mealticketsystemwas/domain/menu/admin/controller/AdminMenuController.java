@@ -30,8 +30,9 @@ public class AdminMenuController {
     @PostMapping(value = "/menu", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(
             summary = "새 메뉴 등록",
-            description = "관리자가 새로운 메뉴를 등록합니다.\n" +
-                    "요청 본문에는 메뉴 이름, 가격, 카테고리, 식당 ID, 이미지 파일 등을 포함합니다."
+            description = "관리자가 새로운 메뉴를 등록합니다." +
+                    "요청 본문에는 메뉴 이름, 가격, 카테고리, 식당 ID, 이미지 파일 등을 포함합니다.\n\n"+
+                    "이미지 파일 업로드 하지 않을 경우 Send empty value 체크 하지 않아야 합니다."
     )
     @ApiResponses(value = {
             @ApiResponse(
