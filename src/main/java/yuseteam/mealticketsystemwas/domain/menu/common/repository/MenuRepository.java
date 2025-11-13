@@ -5,13 +5,14 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Lock;
 import org.springframework.data.jpa.repository.Query;
 import yuseteam.mealticketsystemwas.domain.menu.common.entity.Menu;
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface MenuRepository extends JpaRepository<Menu,Long> {
 
-    List<Menu> findByRestaurantIdAndCategory(Long restaurantId, String category);
+    List<Menu> findByRestaurantIdAndCategory(Long restaurantId, MenuCategory category);
 
     List<Menu> findByRestaurantId(Long restaurantId);
 

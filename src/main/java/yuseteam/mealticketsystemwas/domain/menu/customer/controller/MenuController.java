@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuDetailResponse;
 import yuseteam.mealticketsystemwas.domain.menu.common.dto.MenuResponse;
 
+import yuseteam.mealticketsystemwas.domain.menu.common.entity.MenuCategory;
 import yuseteam.mealticketsystemwas.domain.menu.customer.service.MenuService;
 
 import java.util.List;
@@ -61,7 +62,7 @@ public class MenuController {
     })
     public ResponseEntity<List<MenuResponse>> getMenus(
             @PathVariable Long restaurantId,
-            @PathVariable String category) {
+            @PathVariable MenuCategory category) {
 
         List<MenuResponse> menus = menuService.getMenuByRestaurantAndCategory(restaurantId, category);
         return ResponseEntity.ok(menus);
