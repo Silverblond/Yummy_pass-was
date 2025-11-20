@@ -4,6 +4,7 @@ import jakarta.servlet.ServletException;
 import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.ResponseCookie;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
@@ -42,13 +43,26 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
         Integer tokenVersion = (user == null || user.getTokenVersion() == null) ? 0 : user.getTokenVersion();
 
         String token = jwtService.createToken(userId, roleName, tokenVersion);
-        Cookie cookie = new Cookie("Authorization", token);
-        cookie.setHttpOnly(true);
-        cookie.setSecure(true); // HTTPS 환경에서만 전송 (배포 시 필수)
-        cookie.setPath("/");
-        cookie.setMaxAge(24 * 60 * 60);
-        response.addCookie(cookie);
-
+        ResponseCookie responseCookie= ResponseCookie.from("Authorization", token)
+                .httpOnly(true)
+                .secure(true)
+                .path("/")
+                .sameSite("None")
+                .maxAge(24 * 60 * 60)
+                .build();
+        response.addHeader("Set-Cookie", responseCookie.toString());
+//
+//        response.addHeader("Set-Cookie", "Authorization=" + token);
+//
+//        response.sendRedirect("https://yummy-test-ashy.vercel.app/social-signup-phone");
+//
+//        Cookie cookie = new Cookie("Authorization", token);
+//        cookie.setHttpOnly(true);
+//        cookie.setSecure(true); // HTTPS 환경에서만 전송 (배포 시 필수)
+//        cookie.setPath("/");
+//        cookie.setMaxAge(24 * 60 * 60);
+//        response.addCookie(cookie);
+//
         String redirectUrl = "https://yummy-test-ashy.vercel.app/social-signup-phone";
         getRedirectStrategy().sendRedirect(request, response, redirectUrl);
     }

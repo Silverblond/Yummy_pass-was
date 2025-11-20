@@ -22,6 +22,8 @@ import yuseteam.mealticketsystemwas.domain.oauthjwt.oauth2.CustomSuccessHandler;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.repository.UserRepository;
 import yuseteam.mealticketsystemwas.domain.oauthjwt.service.CustomOAuth2UserService;
 
+import java.lang.reflect.Array;
+import java.util.Arrays;
 import java.util.Collections;
 
 @Configuration
@@ -69,8 +71,9 @@ public class SecurityConfig {
                         configuration.setAllowedHeaders(Collections.singletonList("*"));
                         configuration.setMaxAge(3600L);
 
-                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
-                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
+                        configuration.setExposedHeaders(Arrays.asList("Set-Cookie", "Authorization"));
+//                        configuration.setExposedHeaders(Collections.singletonList("Set-Cookie"));
+//                        configuration.setExposedHeaders(Collections.singletonList("Authorization"));
 
                         return configuration;
                     }
