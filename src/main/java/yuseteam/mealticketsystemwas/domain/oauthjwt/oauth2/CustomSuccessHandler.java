@@ -53,7 +53,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
                 .build();
         response.addHeader("Set-Cookie", responseCookie.toString());
 
-        if (Objects.requireNonNull(user).getPhone() != null) {
+        if (user != null && user.getPhone() != null) {
             String redirectUrl = "https://yummy-test-ashy.vercel.app/ticket-purchase";
             getRedirectStrategy().sendRedirect(request, response, redirectUrl);
             return;
