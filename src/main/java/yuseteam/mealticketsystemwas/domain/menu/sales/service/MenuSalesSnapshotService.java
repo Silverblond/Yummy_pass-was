@@ -32,6 +32,12 @@ public class MenuSalesSnapshotService {
         LocalDateTime now = LocalDateTime.now();
 
         for (Menu menu : menus) {
+            // visible=false인 메뉴는 스냅샷 기록 건너뛰기
+            if (!menu.getVisible()) {
+                log.debug("메뉴 [{}]는 숨김 처리되어 스냅샷 기록을 건너뜁니다.", menu.getName());
+                continue;
+            }
+
             int currentCumulativeSales = menu.getCumulativeSoldQuantity();
 
             //5분 전의 마지막 스냅샷 조회
