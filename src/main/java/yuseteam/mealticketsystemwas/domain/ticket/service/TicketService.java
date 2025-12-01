@@ -3,6 +3,7 @@ package yuseteam.mealticketsystemwas.domain.ticket.service;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import yuseteam.mealticketsystemwas.config.SecurityUtil;
 import yuseteam.mealticketsystemwas.domain.ticket.dto.TicketResDTO;
 import yuseteam.mealticketsystemwas.domain.ticket.entity.Ticket;
 import yuseteam.mealticketsystemwas.domain.ticket.repository.TicketRepository;
@@ -18,8 +19,14 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public List<TicketResDTO> getExpiredTickets(){
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        if (currentUserId == null) {
+            return List.of();
+        }
+
         LocalDateTime expiredTime = LocalDateTime.now().minusDays(1);
-        List<Ticket> expiredTickets = ticketRepository.findByIsUsedFalseAndPurchaseTimeBefore(expiredTime);
+        List<Ticket> expiredTickets = ticketRepository.findByUserIdAndIsUsedFalseAndPurchaseTimeBefore(currentUserId, expiredTime);
 
         return expiredTickets.stream()
                 .map(TicketResDTO::fromEntity)
@@ -28,7 +35,13 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public List<TicketResDTO> getUnusedTickets() {
-        List<Ticket> unusedTickets = ticketRepository.findByIsUsedFalse();
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        if (currentUserId == null) {
+            return List.of();
+        }
+
+        List<Ticket> unusedTickets = ticketRepository.findByUserIdAndIsUsedFalse(currentUserId);
 
         return unusedTickets.stream()
                 .map(TicketResDTO::fromEntity)
@@ -55,7 +68,13 @@ public class TicketService {
 
     @Transactional(readOnly = true)
     public List<TicketResDTO> getUsedTickets() {
-        List<Ticket> usedTickets = ticketRepository.findByIsUsedTrue();
+
+        Long currentUserId = SecurityUtil.getCurrentUserId();
+        if (currentUserId == null) {
+            return List.of();
+        }
+
+        List<Ticket> usedTickets = ticketRepository.findByUserIdAndIsUsedTrue(currentUserId);
 
         return usedTickets.stream()
                 .map(TicketResDTO::fromEntity)

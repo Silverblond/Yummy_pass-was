@@ -10,11 +10,11 @@ import java.util.List;
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Optional<Ticket> findByQrCode(String qrCode);
 
-    List<Ticket> findByIsUsedFalseAndPurchaseTimeBefore(LocalDateTime expiredTime);
+    List<Ticket> findByUserIdAndIsUsedFalseAndPurchaseTimeBefore(Long userId, LocalDateTime expiredTime);
 
-    List<Ticket> findByIsUsedFalse();
+    List<Ticket> findByUserIdAndIsUsedFalse(Long userId);
 
     List<Ticket> findByOrderItemMenuIdAndUsedTimeIsNotNullAndReceivedTimeIsNotNull(Long menuId);
 
-    List<Ticket> findByIsUsedTrue();
+    List<Ticket> findByUserIdAndIsUsedTrue(Long userId);
 }
