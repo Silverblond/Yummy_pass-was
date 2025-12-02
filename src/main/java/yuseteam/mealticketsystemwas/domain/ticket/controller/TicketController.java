@@ -77,9 +77,13 @@ public class TicketController {
                     ))
     })
     @PatchMapping("/{ticketId}/receive")
-    public ResponseEntity<TicketResDTO> completeReceive(@PathVariable Long ticketId) {
-        TicketResDTO updated = ticketService.completeReceive(ticketId);
-        return ResponseEntity.ok(updated);
+    public ResponseEntity<?> completeReceive(@PathVariable Long ticketId) {
+        try {
+            TicketResDTO updated = ticketService.completeReceive(ticketId);
+            return ResponseEntity.ok(updated);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
     }
 
     @Operation(
